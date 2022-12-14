@@ -1,0 +1,2 @@
+import syntaxNN
+import formOfWordNN
