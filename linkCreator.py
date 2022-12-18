@@ -11,16 +11,30 @@ class SemanticLink:
         self.addition = addition
 
     def __str__(self):
-        if type(self.predicate) == str:
-            return " ".join([self.subject.text, self.predicate, self.addition.text])
-
-        return " ".join([self.subject.text, self.predicate.text, self.addition.text])
+        result = []
+        result.append(
+            self.subject.text if hasattr(self.subject, "text") else self.subject
+        )
+        result.append(
+            self.predicate.text if hasattr(self.predicate, "text") else self.predicate
+        )
+        result.append(
+            self.addition.text if hasattr(self.addition, "text") else self.addition
+        )
+        return " ".join(result)
 
     def __repr__(self):
-        if type(self.predicate) == str:
-            return " ".join([self.subject.text, self.predicate, self.addition.text])
-
-        return " ".join([self.subject.text, self.predicate.text, self.addition.text])
+        result = []
+        result.append(
+            self.subject.text if hasattr(self.subject, "text") else self.subject
+        )
+        result.append(
+            self.predicate.text if hasattr(self.predicate, "text") else self.predicate
+        )
+        result.append(
+            self.addition.text if hasattr(self.addition, "text") else self.addition
+        )
+        return " ".join(result)
 
 
 def find_if_is_positive(array, token):
@@ -61,6 +75,9 @@ def predicate_root_case(array, result_array, subject, predicate):
             result_array.append(SemanticLink(subject, predicate, token))
         # Я люблю кушать сосиски
         if token.rel == "xcomp":
+            result_array.append(SemanticLink(subject, predicate, token))
+        # Я любила гранат
+        if token.rel == "obj":
             result_array.append(SemanticLink(subject, predicate, token))
 
 
