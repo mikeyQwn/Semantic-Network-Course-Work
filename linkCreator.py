@@ -1,8 +1,5 @@
 import numpy as np
 
-import syntaxNN
-import formOfWordNN
-
 
 class SemanticLink:
     def __init__(self, subject, predicate, addition):
@@ -82,28 +79,27 @@ def predicate_root_case(array, result_array, subject, predicate):
 
 
 def create_links(semantics_aray):
-    numpy_array = np.array(semantics_aray.tokens)
+    tokens_array = np.array(semantics_aray.tokens)
     links = []
-    for token in numpy_array:
-        print(token)
-    for subject in numpy_array:
+
+    for subject in tokens_array:
         if subject.rel != "nsubj":
             continue
 
         # ()
         if subject.id == subject.head_id:
-            pointing_to_itself_case(numpy_array, links, subject)
+            pointing_to_itself_case(tokens_array, links, subject)
 
-        for second_token in numpy_array:
+        for second_token in tokens_array:
             if not subject.head_id == second_token.id:
                 continue
 
             # Я - человек // Оно - не робот (Главная часть, нет сказуемого в виде глагола)
             if second_token.rel == "root" and second_token.pos == "NOUN":
-                is_positive = find_if_is_positive(numpy_array, second_token)
+                is_positive = find_if_is_positive(tokens_array, second_token)
                 no_predicate_case(links, subject, second_token, is_positive)
                 continue
 
             if second_token.rel == "root" and second_token.pos == "VERB":
-                predicate_root_case(numpy_array, links, subject, second_token)
+                predicate_root_case(tokens_array, links, subject, second_token)
     return links
