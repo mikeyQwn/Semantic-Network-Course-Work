@@ -5,13 +5,14 @@ import pylab
 import random
 
 
-def plot_links_array(links_array):
+def plot_sentence_links_array(sentence_links_array):
     G = nx.DiGraph()
     nodes = {}
-    for link in links_array:
-        nodes[link.subject] = random.random()
-        nodes[link.addition] = random.random()
-        G.add_edges_from([(link.subject, link.addition)], label=link.predicate)
+    for sentence_links in sentence_links_array:
+        for link in sentence_links:
+            nodes[link.subject] = random.random()
+            nodes[link.addition] = random.random()
+            G.add_edges_from([(link.subject, link.addition)], label=link.predicate)
 
     edge_labels = dict(
         [
@@ -30,7 +31,7 @@ def plot_links_array(links_array):
 
     # Need to create a layout when doing
     # separate calls to draw nodes and edges
-    pos = nx.spring_layout(G)
+    pos = nx.circular_layout(G)
     nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap("jet"), node_size=1500)
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
     nx.draw_networkx_labels(G, pos)
