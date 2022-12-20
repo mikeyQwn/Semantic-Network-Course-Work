@@ -1,9 +1,9 @@
-from formOfWordNN import normalize_link
+from wordNormalizer import normalize_link
 import linkCreator
 import networkPlotter
 import syntaxNN
 
-text = "Я любила гранат. Миша тоже любил гранат. Я ем яблоко. Ялоко - это хорошо. Люди едят яблоки"
+text = "Я любила гранат. Саша тоже любил гранат. Я ем яблоко. Ялоко - это фрукт. Люди едят яблоки"
 
 
 def main():
@@ -15,8 +15,9 @@ def main():
         if len(sentence) == 0:
             continue
         print(index, " ", sentence)
-        sentance_arr = syntaxNN.parse_setence(sentence)
-        links_arr = linkCreator.create_links(sentance_arr)
+        sentence_arr = syntaxNN.parse_setence(sentence)
+        # networkPlotter.plot_sentence_syntax(sentence_arr.tokens)
+        links_arr = linkCreator.create_links(sentence_arr)
         for link in links_arr:
             normalize_link(link)
         print(links_arr)
