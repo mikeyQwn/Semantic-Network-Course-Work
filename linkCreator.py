@@ -78,9 +78,41 @@ def predicate_root_case(array, result_array, subject, predicate):
             result_array.append(SemanticLink(subject, predicate, token))
 
 
+def subject_predicate_what_addition_case(array, result_array, subject):
+    for predicate in array:
+        if predicate.head_id != subject.id:
+            continue
+        if predicate.pos != "VERB":
+            continue
+        # Мама мыла раму
+        for addition in array:
+            if subject.id != addition.head_id:
+                continue
+            if addition.rel != "appos":
+                continue
+            print(subject.text, predicate.text, addition.text)
+        # Мама мыла меня
+        for addition in array:
+            if addition.head_id != predicate.id:
+                continue
+            if addition.rel != "nmod":
+                continue
+            print(subject.text, predicate.text, addition.text)
+
+
 def create_links(semantics_aray):
     tokens_array = np.array(semantics_aray.tokens)
     links = []
+    for token in tokens_array:
+        print(token)
+
+    for subject in tokens_array:
+        if subject.rel != "root":
+            continue
+        if subject.pos != "NOUN":
+            continue
+        # Мама мыла раму
+        subject_predicate_what_addition_case(tokens_array, links, subject)
 
     for subject in tokens_array:
         if subject.rel != "nsubj":
@@ -93,6 +125,9 @@ def create_links(semantics_aray):
         for second_token in tokens_array:
             if not subject.head_id == second_token.id:
                 continue
+
+            print(second_token)
+            print(subject)
 
             # Я - человек // Оно - не робот (Главная часть, нет сказуемого в виде глагола)
             if second_token.rel == "root" and second_token.pos == "NOUN":
